@@ -1,3 +1,6 @@
+# USAGE python melt.py -f/--file [PATH_TO_FILE] -m/--memSize [MEMORY_SIZE]
+
+
 # Import packages
 import argparse
 import precompile as pc
