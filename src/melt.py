@@ -4,6 +4,7 @@
 # Import packages
 import argparse
 import precompile as pc
+import getch
 
 # Setup our arguments
 ap = argparse.ArgumentParser()
@@ -48,7 +49,6 @@ def parseCommands(instructions,memberDict):
                     memberDict = parseCommands(scoopedInst,memberDict)
                     loopPointer = memberDict["memPointer"]
 
-
                 scoopedInst=""
             elif char == "[":
                 depth+=1
@@ -69,6 +69,8 @@ def parseCommands(instructions,memberDict):
                 print(chr(memberDict["memList"][memberDict["memPointer"]]),end='')
             elif char == "[":
                 scoop = True
+            elif char == ",":
+                memberDict["memList"][memberDict["memPointer"]] = ord(getch.getch())
             #print(char,end="")
 
 
