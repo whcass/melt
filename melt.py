@@ -12,54 +12,54 @@ if args["memSize"] is None:
     memSize = 30000
 else:
     memSize = int(args["memSize"])
-
-memList = [0] * memSize
-memPointer = 0
-scoop = False
-scoopedInst = ""
+memberDict = {
+    "memList" : [0] * memSize,
+    "memPointer":0,
+}
 
 def dumpMem(memList):
     for mem in memList:
-        print(str(mem) + ",",end="")
-
+        print(str(mem) + ",", end="")
     print()
+
+def parseCommands(instructions,memberDict):
+    scoopedInst = ""
+    scoop = False
+    depth = 0
+
+    for char in instructions:
+        if scoop:
+            if char == "]":
+                scoop = False
+                # scoopedInst+=char
+
+                loopPointer = memberDict["memPointer"]
+                while (int(memberDict["memList"][loopPointer]) > 0):
+                    memberDict = parseCommands(scoopedInst,memberDict)
+                scoopedInst=""
+            elif char == "[":
+                depth+=1
+            else:
+                # print(char,end="")
+                scoopedInst+=char
+        else:
+            if char == ">":
+                memberDict["memPointer"]+=1
+            elif char == "<":
+                memberDict["memPointer"]-=1
+            elif char == "+":
+                memberDict["memList"][memberDict["memPointer"]]+=1
+            elif char == "-":
+                memberDict["memList"][memberDict["memPointer"]]-=1
+            elif char == ".":
+                print(chr(memberDict["memList"][memberDict["memPointer"]]),end='')
+            elif char == "[":
+                scoop = True
+            print(char,end="")
+
+
+    return memberDict
+
 with open(args["file"]) as f:
     for line in f:
-        for char in line:
-            if scoop:
-                if char == "]":
-
-                    scoop = False
-                    loopPointer = memPointer
-
-                    while (int(memList[loopPointer]) > 0):
-                        for char in scoopedInst:
-                            if char == ">":
-                                memPointer+=1
-                            elif char == "<":
-                                memPointer-=1
-                            elif char == "+":
-                                memList[memPointer]+=1
-                            elif char == "-":
-                                memList[memPointer]-=1
-                            elif char == ".":
-                                print(memList[memPointer])
-                                print(chr(memList[memPointer]),end='')
-                            elif char == "[":
-                                scoop = True
-
-                else:
-                    scoopedInst+=char
-            else:
-                if char == ">":
-                    memPointer+=1
-                elif char == "<":
-                    memPointer-=1
-                elif char == "+":
-                    memList[memPointer]+=1
-                elif char == "-":
-                    memList[memPointer]-=1
-                elif char == ".":
-                    print(chr(memList[memPointer]),end='')
-                elif char == "[":
-                    scoop = True
+        memberDict = parseCommands(line,memberDict)
