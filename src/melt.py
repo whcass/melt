@@ -1,6 +1,6 @@
 # Import packages
 import argparse
-import re
+import precompile as pc
 
 # Setup our arguments
 ap = argparse.ArgumentParser()
@@ -25,15 +25,6 @@ def dumpMem(memList):
         print(str(mem) + ",", end="")
     print()
 
-def pre_compile(file):
-    pattern = re.compile('\[|\+|\.|\,|\<|\>|\]|\-')
-    instructionSet = ""
-    for line in file:
-        for char in line:
-            if pattern.match(char):
-                instructionSet+=char
-
-    return instructionSet
 
 def parseCommands(instructions,memberDict):
     scoopedInst = ""
@@ -81,5 +72,6 @@ def parseCommands(instructions,memberDict):
     return memberDict
 
 with open(args["file"]) as f:
-    instructions = pre_compile(f)
+    instructions = pc.preCompile(f)
+
 parseCommands(instructions,memberDict)
