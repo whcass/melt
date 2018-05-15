@@ -9,7 +9,8 @@ import getch
 # Setup our arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-f", "--file", required = True, help = "Path to the .bf file")
-ap.add_argument("-m","--memSize", help = "Size of memory to use (default: )")
+ap.add_argument("-m","--memSize", help = "Size of memory to use (default: 30000)")
+ap.add_argument("-d","--debug",help = "Enables debug with a memLength output (default: 8)")
 
 args = vars(ap.parse_args())
 
@@ -76,7 +77,24 @@ def parseCommands(instructions,memberDict):
 
     return memberDict
 
+def printdebug(length,memPointer):
+    print()
+    print("==========DEBUG START==========");
+    for x in range(int(length)):
+        if memPointer==x-1:
+            endStr = "<"
+        else:
+            endStr = ""
+        print("["+str(memberDict["memList"][x])+"]",end=endStr)
+        if x is not int(length)-1:
+            print(",",end="")
+
+
+
 with open(args["file"]) as f:
     instructions = pc.preCompile(f)
 
 parseCommands(instructions,memberDict)
+
+if args["debug"] is not None:
+    printdebug(args["debug"],memberDict["memPointer"])
