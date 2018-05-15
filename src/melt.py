@@ -81,7 +81,7 @@ def printdebug(length,memPointer):
     print()
     print("==========DEBUG START==========");
     for x in range(int(length)):
-        if memPointer==x-1:
+        if memPointer==x:
             endStr = "<"
         else:
             endStr = ""
