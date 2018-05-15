@@ -11,7 +11,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("-f", "--file", required = True, help = "Path to the .bf file")
 ap.add_argument("-m","--memSize", help = "Size of memory to use (default: 30000)")
 ap.add_argument("-d","--debug",help = "Enables debug with a memLength output (default: 8)")
-
+ap.add_argument("-t","--tinify", help = "Retunrs the tinified version of your code")
 args = vars(ap.parse_args())
 
 if args["memSize"] is None:
@@ -93,7 +93,9 @@ def printdebug(length,memPointer):
 
 with open(args["file"]) as f:
     instructions = pc.preCompile(f)
-
+if args["tinify"] is not None:
+    print(instructions)
+    exit()
 parseCommands(instructions,memberDict)
 
 if args["debug"] is not None:
